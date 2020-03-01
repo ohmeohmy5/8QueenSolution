@@ -7,11 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Control;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 public class Board extends Application {
@@ -24,12 +20,17 @@ public class Board extends Application {
         int[][] boardArray = board.getBoard();
         GridPane boardPane = new GridPane();
         int size = 8 ;
+        Image queenImage = new Image("file:queen.png");
+        ImageView queenImageView = new ImageView(queenImage);
+        queenImageView.setFitWidth(10);
+        queenImageView.setFitHeight(10);
+        queenImageView.setCache(true);
 
         for (int row = 0; row < size; row++)
         {
             for (int col = 0; col < size; col++)
             {
-                StackPane square = new StackPane();
+                Pane square = new HBox();
                 String color;
                 if ((row + col) % 2 == 0)
                 {
@@ -42,12 +43,10 @@ public class Board extends Application {
 
                 square.setStyle("-fx-background-color: "+color+";");
 
-                if(boardArray[row][col] == 1)
+                if (boardArray[row][col] == 1)
                 {
-                    square.setStyle("-fx-background-image: url('/queen.png')");
-                    square.setStyle("-fx-background-size: 100, 200;");
+                    square.getChildren().add(queenImageView);
                 }
-
                 boardPane.add(square, col, row);
             }
         }
@@ -57,6 +56,7 @@ public class Board extends Application {
             boardPane.getColumnConstraints().add(new ColumnConstraints(10, Control.USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, HPos.CENTER, true));
             boardPane.getRowConstraints().add(new RowConstraints(10, Control.USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.CENTER, true));
         }
+
         primaryStage.setScene(new Scene(boardPane, 800, 800));
        primaryStage.show();
 
