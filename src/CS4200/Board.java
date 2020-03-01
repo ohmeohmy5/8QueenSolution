@@ -1,89 +1,69 @@
 package CS4200;
 
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.util.*;
-import java.util.List;
-import javafx.util.Pair;
-import javax.swing.*;
+import javafx.application.Application;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.control.Control;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
-@SuppressWarnings("serial")
-public class Board extends JPanel implements MouseListener, MouseMotionListener {
-	// Resource location constants for piece images
-	private static final String RESOURCES_QUEEN_PNG = "resources/bqueen.png";
+public class Board extends Application {
 
-    private static final int DEPTH_LEVEL = 3;
+    @Override
+    public void start(Stage primaryStage)
+    {
+        QueenBoard board = new QueenBoard();
+        board.gameLoop(board.getBoard(), 0, 0);
+        int[][] boardArray = board.getBoard();
+        GridPane boardPane = new GridPane();
+        int size = 8 ;
 
-	// Logical and graphical representations of board
-	private Square[][] board;
-    private GameWindow g;
-    
-    // List of pieces and whether they are movable
+        for (int row = 0; row < size; row++)
+        {
+            for (int col = 0; col < size; col++)
+            {
+                StackPane square = new StackPane();
+                String color;
+                if ((row + col) % 2 == 0)
+                {
+                    color = "white";
+                }
+                else
+                {
+                    color = "black";
+                }
 
-    public List<Square> movable;
+                square.setStyle("-fx-background-color: "+color+";");
 
-    private boolean whiteTurn;
+                if(boardArray[row][col] == 1)
+                {
+                    square.setStyle("-fx-background-image: url('/queen.png')");
+                    square.setStyle("-fx-background-size: 100, 200;");
+                }
 
-    public Board(GameWindow g) {
-        initializeBoard(g);
-    }
-
-    public Board(GameWindow g, boolean init) {
-        if (init) {
-            initializeBoard(g);
+                boardPane.add(square, col, row);
+            }
         }
-        else {
-            this.g = g;
-            board = new Square[8][8];
-            whiteTurn = true;
+
+        for (int i = 0; i < size; i++)
+        {
+            boardPane.getColumnConstraints().add(new ColumnConstraints(10, Control.USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, HPos.CENTER, true));
+            boardPane.getRowConstraints().add(new RowConstraints(10, Control.USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.CENTER, true));
         }
-    }
-
-    public void initializeBoard(GameWindow g) {
-        this.g = g;
-        setLayout(new GridLayout(8, 8, 0, 0));
-
-        this.setPreferredSize(new Dimension(400, 400));
-        this.setMaximumSize(new Dimension(400, 400));
-        this.setMinimumSize(this.getPreferredSize());
-        this.setSize(new Dimension(400, 400));
-
+        primaryStage.setScene(new Scene(boardPane, 800, 800));
+       primaryStage.show();
 
     }
 
-    public Square[][] getSquareArray() {
-        return this.board;
+    public static void main(String[] args)
+    {
+        launch(args);
     }
-
-    public boolean getTurn() {
-        return whiteTurn;
-    }
-
-    public void setCurrPiece(Piece p) {
-        this.currPiece = p;
-    }
-
-    public Piece getCurrPiece() {
-        return this.currPiece;
-    }
-
-    // Irrelevant methods, do nothing for these mouse behaviors
-    @Override
-    public void mouseMoved(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
-
 }
