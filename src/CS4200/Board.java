@@ -21,15 +21,15 @@ public class Board extends Application {
         GridPane boardPane = new GridPane();
         int size = 8 ;
         Image queenImage = new Image(getClass().getResourceAsStream("queen.png"));
-        ImageView queenImageView = new ImageView(queenImage);
-        queenImageView.setFitWidth(50);
-        queenImageView.setFitHeight(50);
 
         for (int row = 0; row < size; row++)
         {
             for (int col = 0; col < size; col++)
             {
-                ImageView imgView = queenImageView;
+                ImageView queenImageView = new ImageView(queenImage);
+                queenImageView.setFitWidth(50);
+                queenImageView.setFitHeight(50);
+
                 Pane square = new Pane();
                 String color;
                 if ((row + col) % 2 == 0)
@@ -41,12 +41,11 @@ public class Board extends Application {
                     color = "black";
                 }
 
-                imgView.setStyle("-fx-background-color: "+color+";");
                 square.setStyle("-fx-background-color: "+color+";");
 
                 if (boardArray[row][col] == 1)
                 {
-                    boardPane.add(imgView, col, row);
+                    boardPane.add(queenImageView, col, row);
                 }
                 else {
                     boardPane.add(square, col, row);
